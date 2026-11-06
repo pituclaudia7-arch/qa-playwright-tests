@@ -11,7 +11,7 @@ test('Valid login', async ({ page }) => {
   await page.getByRole('button', { name: /login$/i }).click();
 
   // ASSERT
-  await expect(page).not.toHaveURL(/login/i);
+  await expect(page.getByRole('heading', { name: /my account/i })).toBeVisible();
 });
 
 test('Invalid password', async ({ page }) => {
@@ -38,7 +38,10 @@ test('Empty username', async ({ page }) => {
   await page.getByRole('button', { name: /login$/i }).click();
 
   // ASSERT
-  await expect(page.locator('#loginFrm_loginname')).toHaveValue('');
+  const username = page.locator('#loginFrm_loginname');
+  await expect(page).toHaveURL(/login/i);
+  await expect(username).toHaveValue('');
+  await expect(page.locator('#loginFrm_loginname:invalid')).toBeVisible();
 });
 
 test('Navigate to Products page', async ({ page }) => {
